@@ -2,17 +2,11 @@ package com.example.template.event;
 
 public class DeliveryStarted extends AbstractEvent{
 
-    private String stateMessage;
-
     private Long deliveryId;
     private Long orderId;
     private String customerName;
     private String deliveryAddress;
     private String deliveryState;
-
-    public String getStateMessage() {
-        return stateMessage;
-    }
 
     public String getCustomerName() {
         return customerName;
@@ -20,10 +14,6 @@ public class DeliveryStarted extends AbstractEvent{
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
-    }
-
-    public void setStateMessage(String stateMessage) {
-        this.stateMessage = stateMessage;
     }
 
     public Long getDeliveryId() {

@@ -2,25 +2,11 @@ package com.example.template.event;
 
 public class DeliveryCompleted extends AbstractEvent{
 
-    private String stateMessage = "배송이 완료됨";
-
     private Long deliveryId;
     private Long orderId;
     private String customerName;
     private String deliveryAddress;
     private String deliveryState;
-
-    public DeliveryCompleted(){
-        this.setEventType(this.getClass().getSimpleName());
-    }
-
-    public String getStateMessage() {
-        return stateMessage;
-    }
-
-    public void setStateMessage(String stateMessage) {
-        this.stateMessage = stateMessage;
-    }
 
     public String getCustomerName() {
         return customerName;

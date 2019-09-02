@@ -28,7 +28,6 @@ public class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 		User user = new User();
-		user.setId(1l);
 		user.setUsername("1@uengine.org");
 		user.setPassword(passwordEncoder.encode("1"));
 		user.setNickname("유엔진");

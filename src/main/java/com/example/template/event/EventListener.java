@@ -17,10 +17,7 @@ import java.io.IOException;
 @Service
 public class EventListener {
 
-    @Value("${topic.topicName}")
-    String topicName;
-
-    @KafkaListener(topics = "${topic.topicName}")
+    @KafkaListener(topics = "${eventTopic}")
     public void onMessage(@Payload String message, ConsumerRecord<?, ?> consumerRecord) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -29,6 +26,18 @@ public class EventListener {
             event = objectMapper.readValue(message, AbstractEvent.class);
 
             if( event.getEventType().equals(DeliveryCompleted.class.getSimpleName())){
+
+            }
+
+            else if( event.getEventType().equals(DeliveryStarted.class.getSimpleName())){
+
+            }
+
+            else if( event.getEventType().equals(OrderPlaced.class.getSimpleName())){
+
+            }
+
+            else if( event.getEventType().equals(DeliveryStarted.class.getSimpleName())){
 
             }
         } catch (

@@ -36,6 +36,22 @@ public class Application implements CommandLineRunner {
 
 		repository.save(user);
 
+        user.setUsername("2@uengine.org");
+        user.setPassword(passwordEncoder.encode("1"));
+        user.setNickname("홍길동");
+        user.setAddress("서울시 강남구");
+        user.setMoney(3000000L);
+
+        repository.save(user);
+
+        user.setUsername("3@uengine.org");
+        user.setPassword(passwordEncoder.encode("1"));
+        user.setNickname("신사임당");
+        user.setAddress("서울시 서초구");
+        user.setMoney(2000000L);
+
+        repository.save(user);
+
     }
 
     @Bean

@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+
+eventTopic: eventTopic
+
+---
+spring:
+  profiles: default
+  kafka:
+#    bootstrap-servers: http://35.200.47.242:31090
+    bootstrap-servers: localhost:9092
+    consumer:
+      enable-auto-commit: true
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+
+server:
+  port: 8086
+---
+spring:
+  profiles: docker
+  kafka:
+    bootstrap-servers: my-kafka.kafka.svc.cluster.local:9092
+    consumer:
+      enable-auto-commit: true

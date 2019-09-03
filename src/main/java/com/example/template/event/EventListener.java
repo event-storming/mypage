@@ -43,8 +43,7 @@ public class EventListener {
             if( event.getEventType().equals(DeliveryCompleted.class.getSimpleName())){
                 DeliveryCompleted deliveryCompleted = objectMapper.readValue(message, DeliveryCompleted.class);
 
-                OrderHistory orderHistory = new OrderHistory();
-                orderHistory.setOrderId(deliveryCompleted.getOrderId());
+                OrderHistory orderHistory = orderHistoryRepository.findById(deliveryCompleted.getOrderId()).get();
                 orderHistory.setDeliveryCompleted(true);
 
                 orderHistoryRepository.save(orderHistory);
@@ -54,8 +53,7 @@ public class EventListener {
             else if( event.getEventType().equals(DeliveryStarted.class.getSimpleName())){
                 DeliveryStarted deliveryStarted = objectMapper.readValue(message, DeliveryStarted.class);
 
-                OrderHistory orderHistory = new OrderHistory();
-                orderHistory.setOrderId(deliveryStarted.getOrderId());
+                OrderHistory orderHistory = orderHistoryRepository.findById(deliveryStarted.getOrderId()).get();
                 orderHistory.setDeliveryStarted(true);
 
                 orderHistoryRepository.save(orderHistory);

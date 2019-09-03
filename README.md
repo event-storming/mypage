@@ -8,3 +8,6 @@ oauth 서버와 같은 DB 를 바라보며 user 의 상세 정보를 조회 할 
 
 ### 유저 정보 조회
 http http://localhost:8086/users/1@uengine.org  
+
+### 주문 정보 조회
+http http://localhost:8086/mypage/order/1@uengine.org  

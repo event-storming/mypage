@@ -27,30 +27,30 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-		User user = new User();
-		user.setUsername("1@uengine.org");
-		user.setPassword(passwordEncoder.encode("1"));
-		user.setNickname("유엔진");
-		user.setAddress("서울시 논현동");
-		user.setMoney(1000000L);
-
-		repository.save(user);
-
-        user.setUsername("2@uengine.org");
-        user.setPassword(passwordEncoder.encode("1"));
-        user.setNickname("홍길동");
-        user.setAddress("서울시 강남구");
-        user.setMoney(3000000L);
-
-        repository.save(user);
-
-        user.setUsername("3@uengine.org");
-        user.setPassword(passwordEncoder.encode("1"));
-        user.setNickname("신사임당");
-        user.setAddress("서울시 서초구");
-        user.setMoney(2000000L);
-
-        repository.save(user);
+//		User user = new User();
+//		user.setUsername("1@uengine.org");
+//		user.setPassword(passwordEncoder.encode("1"));
+//		user.setNickname("유엔진");
+//		user.setAddress("서울시 논현동");
+//		user.setMoney(1000000L);
+//
+//		repository.save(user);
+//
+//        user.setUsername("2@uengine.org");
+//        user.setPassword(passwordEncoder.encode("1"));
+//        user.setNickname("홍길동");
+//        user.setAddress("서울시 강남구");
+//        user.setMoney(3000000L);
+//
+//        repository.save(user);
+//
+//        user.setUsername("3@uengine.org");
+//        user.setPassword(passwordEncoder.encode("1"));
+//        user.setNickname("신사임당");
+//        user.setAddress("서울시 서초구");
+//        user.setMoney(2000000L);
+//
+//        repository.save(user);
 
     }
 

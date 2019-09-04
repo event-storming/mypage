@@ -54,6 +54,7 @@ public class EventListener {
                 DeliveryStarted deliveryStarted = objectMapper.readValue(message, DeliveryStarted.class);
 
                 OrderHistory orderHistory = orderHistoryRepository.findById(deliveryStarted.getOrderId()).get();
+                orderHistory.setDeliveryId(deliveryStarted.getDeliveryId());
                 orderHistory.setDeliveryStarted(true);
 
                 orderHistoryRepository.save(orderHistory);

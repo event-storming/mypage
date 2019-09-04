@@ -18,6 +18,7 @@ public class OrderHistory {
     private int quantity;
     private int payment;
 
+    private Long deliveryId;
     private boolean deliveryStarted;
     private boolean deliveryCompleted;
 
@@ -75,6 +76,14 @@ public class OrderHistory {
 
     public void setDeliveryCompleted(boolean deliveryCompleted) {
         this.deliveryCompleted = deliveryCompleted;
+    }
+
+    public Long getDeliveryId() {
+        return deliveryId;
+    }
+
+    public void setDeliveryId(Long deliveryId) {
+        this.deliveryId = deliveryId;
     }
 
     public int getQuantity() {

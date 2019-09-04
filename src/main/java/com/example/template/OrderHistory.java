@@ -15,6 +15,9 @@ public class OrderHistory {
     private String productName;
     private String timestamp;
 
+    private int quantity;
+    private int payment;
+
     private boolean deliveryStarted;
     private boolean deliveryCompleted;
 
@@ -72,5 +75,21 @@ public class OrderHistory {
 
     public void setDeliveryCompleted(boolean deliveryCompleted) {
         this.deliveryCompleted = deliveryCompleted;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getPayment() {
+        return payment;
+    }
+
+    public void setPayment(int payment) {
+        this.payment = payment;
     }
 }

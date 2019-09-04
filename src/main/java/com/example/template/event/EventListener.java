@@ -65,17 +65,22 @@ public class EventListener {
 
                 User user = userRepository.findById(orderPlaced.getCustomerName()).get();
                 if( user != null ){
+
+                    int payMoney = orderPlaced.getPrice() * orderPlaced.getQuantity();
+
                     OrderHistory orderHistory = new OrderHistory();
                     orderHistory.setOrderId(orderPlaced.getOrderId());
                     orderHistory.setProductId(orderPlaced.getProductId());
                     orderHistory.setUsername(orderPlaced.getCustomerName());
                     orderHistory.setProductName(orderPlaced.getProductName());
                     orderHistory.setTimestamp(orderPlaced.getTimestamp());
+                    orderHistory.setQuantity(orderPlaced.getQuantity());
+                    orderHistory.setPayment(payMoney);
 
                     orderHistoryRepository.save(orderHistory);
 
                     // 주문 완료시.. (실제로는 결재가 완료 될거 같긴한데..) 잔액 변경
-                    int payMoney = orderPlaced.getPrice() * orderPlaced.getQuantity();
+
                     user.setMoney( user.getMoney() - payMoney );
 
                     userRepository.save(user);

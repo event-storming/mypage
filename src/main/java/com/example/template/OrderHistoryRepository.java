@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface OrderHistoryRepository extends PagingAndSortingRepository<OrderHistory, Long> {
 
-	List<OrderHistory> findByUsername(String username);
+	List<OrderHistory> findByUserIdOrderByOrderIdDesc(String username);
 
 }

@@ -64,7 +64,7 @@ public class EventListener {
             else if( event.getEventType().equals(OrderPlaced.class.getSimpleName())){
                 OrderPlaced orderPlaced = objectMapper.readValue(message, OrderPlaced.class);
 
-                User user = userRepository.findById(orderPlaced.getCustomerName()).get();
+                User user = userRepository.findById(orderPlaced.getCustomerId()).get();
                 if( user != null ){
 
                     int payMoney = orderPlaced.getPrice() * orderPlaced.getQuantity();
@@ -72,7 +72,8 @@ public class EventListener {
                     OrderHistory orderHistory = new OrderHistory();
                     orderHistory.setOrderId(orderPlaced.getOrderId());
                     orderHistory.setProductId(orderPlaced.getProductId());
-                    orderHistory.setUsername(orderPlaced.getCustomerName());
+                    orderHistory.setUserId(orderPlaced.getCustomerId());
+                    orderHistory.setNickName(orderPlaced.getCustomerName());
                     orderHistory.setProductName(orderPlaced.getProductName());
                     orderHistory.setTimestamp(orderPlaced.getTimestamp());
                     orderHistory.setQuantity(orderPlaced.getQuantity());

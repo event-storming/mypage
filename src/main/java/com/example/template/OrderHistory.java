@@ -9,8 +9,10 @@ public class OrderHistory {
     @Id
     private Long orderId;
 
-    private String username;
+    private String userId;
+    private String nickName;
 
+    // 주문에서 온 정보
     private Long productId;
     private String productName;
     private String timestamp;
@@ -18,6 +20,7 @@ public class OrderHistory {
     private int quantity;
     private int payment;
 
+    // 배송에서 온 정보
     private Long deliveryId;
     private boolean deliveryStarted;
     private boolean deliveryCompleted;
@@ -30,12 +33,20 @@ public class OrderHistory {
         this.orderId = orderId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public Long getProductId() {

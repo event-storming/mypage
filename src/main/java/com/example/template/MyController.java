@@ -16,11 +16,11 @@ public class MyController {
     @Autowired
     MyService myService;
 
-    @RequestMapping(value = "/mypage/order/{username}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/mypage/order/{userId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public List<OrderHistory> myOrderHistory(HttpServletRequest request, HttpServletResponse response,
-                                             @PathVariable(value = "username") String username
+                                             @PathVariable(value = "userId") String userId
     ) throws Exception {
-        return this.myService.myOrderHistory(username);
+        return this.myService.myOrderHistory(userId);
     }
 
 }

@@ -11,7 +11,7 @@ public class MyService {
     @Autowired
     OrderHistoryRepository orderHistoryRepository;
 
-    public List<OrderHistory> myOrderHistory(String username){
-        return this.orderHistoryRepository.findByUsername(username);
+    public List<OrderHistory> myOrderHistory(String userId){
+        return this.orderHistoryRepository.findByUserIdOrderByOrderIdDesc(userId);
     }
 }

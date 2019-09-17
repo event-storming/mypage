@@ -32,6 +32,7 @@ public class Application implements CommandLineRunner {
 //		user.setPassword(passwordEncoder.encode("1"));
 //		user.setNickname("유엔진");
 //		user.setAddress("서울시 논현동");
+//        user.setRole("USER_ADMIN");
 //		user.setMoney(1000000L);
 //
 //		repository.save(user);
@@ -48,6 +49,7 @@ public class Application implements CommandLineRunner {
 //        user.setPassword(passwordEncoder.encode("1"));
 //        user.setNickname("신사임당");
 //        user.setAddress("서울시 서초구");
+//        user.setRole("USER_ADMIN");
 //        user.setMoney(2000000L);
 //
 //        repository.save(user);

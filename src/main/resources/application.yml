@@ -58,3 +58,4 @@ spring:
     password: test1234!@
     # mybatis 설정시에는 driverClassName 을 넣어주어야함
     driverClassName: com.mysql.cj.jdbc.Driver
+eventTopic: eventTopicDocker

@@ -35,7 +35,7 @@ public class EventListener {
      */
     @KafkaListener(topics = "${eventTopic}")
     public void onMessage(@Payload String message, ConsumerRecord<?, ?> consumerRecord) {
-//        System.out.println(message);
+        System.out.println(message);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         AbstractEvent event = null;

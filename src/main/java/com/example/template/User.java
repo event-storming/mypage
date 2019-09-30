@@ -15,7 +15,7 @@ public class User{
 	private String password;
 
 	private String address;
-	private Long money;
+	private Long mileage;
 
 	// oauth 에서 쓰이는 항목
 	private String role;
@@ -52,12 +52,12 @@ public class User{
 		this.address = address;
 	}
 
-	public Long getMoney() {
-		return money;
+	public Long getMileage() {
+		return mileage;
 	}
 
-	public void setMoney(Long money) {
-		this.money = money;
+	public void setMileage(Long mileage) {
+		this.mileage = mileage;
 	}
 
 	public String getRole() {

@@ -11,3 +11,7 @@ http http://localhost:8086/users/1@uengine.org
 
 ### 주문 정보 조회
 http http://localhost:8086/mypage/order/1@uengine.org  
+
+
+### 마일리지 정보 조회
+http http://localhost:8086/mypage/mileage/1@uengine.org  

@@ -1,9 +1,6 @@
 package com.example.template.event;
 
-import com.example.template.OrderHistory;
-import com.example.template.OrderHistoryRepository;
-import com.example.template.User;
-import com.example.template.UserRepository;
+import com.example.template.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +21,10 @@ public class EventListener {
 
     @Autowired
     OrderHistoryRepository orderHistoryRepository;
+
+    @Autowired
+    MileageHistoryRepository mileageHistoryRepository;
+
     @Autowired
     UserRepository userRepository;
 
@@ -34,6 +35,7 @@ public class EventListener {
      */
     @KafkaListener(topics = "${eventTopic}")
     public void onMessage(@Payload String message, ConsumerRecord<?, ?> consumerRecord) {
+//        System.out.println(message);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         AbstractEvent event = null;
@@ -81,11 +83,26 @@ public class EventListener {
 
                     orderHistoryRepository.save(orderHistory);
 
-                    // 주문 완료시.. (실제로는 결재가 완료 될거 같긴한데..) 잔액 변경
+                    // 주문 완료시.. 마일리지 적립
+                    Long mileage = 0L;
+                    if( user.getMileage() != null ){
+                        mileage = user.getMileage() + payMoney / 10;
+                    }else{
+                        mileage = new Long(payMoney / 10);
+                    }
 
-                    user.setMoney( user.getMoney() - payMoney );
+                    user.setMileage( mileage );
 
                     userRepository.save(user);
+
+                    MileageHistory mileageHistory = new MileageHistory();
+                    mileageHistory.setOrderId(orderPlaced.getOrderId());
+                    mileageHistory.setUserId(orderPlaced.getCustomerId());
+                    mileageHistory.setTimestamp(orderPlaced.getTimestamp());
+                    mileageHistory.setMileage(new Long(payMoney / 10));
+                    mileageHistory.setTotalMileage(mileage);
+
+                    mileageHistoryRepository.save(mileageHistory);
                 }else{
                     throw new RuntimeException("유저정보가 없습니다.");
                 }

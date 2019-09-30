@@ -23,4 +23,11 @@ public class MyController {
         return this.myService.myOrderHistory(userId);
     }
 
+    @RequestMapping(value = "/mypage/mileage/{userId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public List<MileageHistory> myMileageHistory(HttpServletRequest request, HttpServletResponse response,
+                                             @PathVariable(value = "userId") String userId
+    ) throws Exception {
+        return this.myService.myMileageHistory(userId);
+    }
+
 }

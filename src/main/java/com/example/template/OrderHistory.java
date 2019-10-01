@@ -25,6 +25,17 @@ public class OrderHistory {
     private boolean deliveryStarted;
     private boolean deliveryCompleted;
 
+    //리뷰 체크유무
+    private boolean surveyCompleted;
+
+    public boolean isSurveyCompleted() {
+        return surveyCompleted;
+    }
+
+    public void setSurveyCompleted(boolean surveyCompleted) {
+        this.surveyCompleted = surveyCompleted;
+    }
+
     public Long getOrderId() {
         return orderId;
     }

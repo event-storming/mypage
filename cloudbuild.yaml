@@ -20,7 +20,7 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
-      - '--tag=gcr.io/$PROJECT_ID/${PROJECT_NAME}:$COMMIT_SHA'
+      - '--tag=gcr.io/$PROJECT_ID/$_PROJECT_NAME:$COMMIT_SHA'
       - '.'
   ### Publish
   - id: 'publish'
@@ -29,7 +29,7 @@ steps:
     args:
       - '-c'
       - |
-        docker push gcr.io/$PROJECT_ID/${PROJECT_NAME}:$COMMIT_SHA
+        docker push gcr.io/$PROJECT_ID/$_PROJECT_NAME:$COMMIT_SHA
   ### deploy
   - id: 'deploy'
     name: 'gcr.io/cloud-builders/gcloud'
@@ -46,37 +46,37 @@ steps:
         apiVersion: v1
         kind: Service
         metadata:
-          name: ${PROJECT_NAME}
+          name: $_PROJECT_NAME
           labels:
-            app: ${PROJECT_NAME}
+            app: $_PROJECT_NAME
         spec:
           ports:
             - port: 8080
               targetPort: 8080
           selector:
-            app: ${PROJECT_NAME}
+            app: $_PROJECT_NAME
         EOF
 
         cat <<EOF | kubectl apply -f -
         apiVersion: apps/v1
         kind: Deployment
         metadata:
-          name: ${PROJECT_NAME}
+          name: $_PROJECT_NAME
           labels:
-            app: ${PROJECT_NAME}
+            app: $_PROJECT_NAME
         spec:
           replicas: 1
           selector:
             matchLabels:
-              app: ${PROJECT_NAME}
+              app: $_PROJECT_NAME
           template:
             metadata:
               labels:
-                app: ${PROJECT_NAME}
+                app: $_PROJECT_NAME
             spec:
               containers:
-                - name: ${PROJECT_NAME}
-                  image: gcr.io/$PROJECT_ID/${PROJECT_NAME}:$COMMIT_SHA
+                - name: $_PROJECT_NAME
+                  image: gcr.io/$PROJECT_ID/$_PROJECT_NAME:$COMMIT_SHA
                   ports:
                     - containerPort: 8080
         EOF
@@ -86,4 +86,5 @@ options:
     #    # location/name of GKE cluster (used by all kubectl commands)
     - CLOUDSDK_COMPUTE_ZONE=asia-northeast1-a
     - CLOUDSDK_CONTAINER_CLUSTER=standard-cluster-1
-    - PROJECT_NAME=mypage
+substitutions:
+  _PROJECT_NAME=mypage

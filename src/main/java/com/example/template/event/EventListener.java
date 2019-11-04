@@ -67,53 +67,53 @@ public class EventListener {
                 OrderPlaced orderPlaced = objectMapper.readValue(message, OrderPlaced.class);
 
                 User user = userRepository.findById(orderPlaced.getCustomerId()).get();
-                if( user != null ){
-
-                    int payMoney = orderPlaced.getPrice() * orderPlaced.getQuantity();
-
-                    OrderHistory orderHistory = new OrderHistory();
-                    orderHistory.setOrderId(orderPlaced.getOrderId());
-                    orderHistory.setProductId(orderPlaced.getProductId());
-                    orderHistory.setUserId(orderPlaced.getCustomerId());
-                    orderHistory.setNickName(orderPlaced.getCustomerName());
-                    orderHistory.setProductName(orderPlaced.getProductName());
-                    orderHistory.setTimestamp(orderPlaced.getTimestamp());
-                    orderHistory.setQuantity(orderPlaced.getQuantity());
-                    orderHistory.setPayment(payMoney);
-
-                    orderHistoryRepository.save(orderHistory);
-
-                    // 주문 완료시.. 마일리지 적립
-                    Long mileage = 0L;
-                    if( user.getMileage() != null ){
-                        mileage = user.getMileage() + payMoney / 10;
-                    }else{
-                        mileage = new Long(payMoney / 10);
-                    }
-
-                    user.setMileage( mileage );
+                if( user == null ) {
+                    user.setUsername(orderPlaced.getCustomerId());
+                    user.setNickname(orderPlaced.getCustomerName());
+                    user.setAddress(orderPlaced.getCustomerAddr());
+                    user.setMileage(0L);
 
                     userRepository.save(user);
-
-                    MileageHistory mileageHistory = new MileageHistory();
-                    mileageHistory.setOrderId(orderPlaced.getOrderId());
-                    mileageHistory.setUserId(orderPlaced.getCustomerId());
-                    mileageHistory.setTimestamp(orderPlaced.getTimestamp());
-                    mileageHistory.setMileage(new Long(payMoney / 10));
-                    mileageHistory.setTotalMileage(mileage);
-
-                    mileageHistoryRepository.save(mileageHistory);
-                }else{
-                    throw new RuntimeException("유저정보가 없습니다.");
                 }
+
+                int payMoney = orderPlaced.getPrice() * orderPlaced.getQuantity();
+
+                OrderHistory orderHistory = new OrderHistory();
+                orderHistory.setOrderId(orderPlaced.getOrderId());
+                orderHistory.setProductId(orderPlaced.getProductId());
+                orderHistory.setUserId(orderPlaced.getCustomerId());
+                orderHistory.setNickName(orderPlaced.getCustomerName());
+                orderHistory.setProductName(orderPlaced.getProductName());
+                orderHistory.setTimestamp(orderPlaced.getTimestamp());
+                orderHistory.setQuantity(orderPlaced.getQuantity());
+                orderHistory.setPayment(payMoney);
+
+                orderHistoryRepository.save(orderHistory);
+
+                // 주문 완료시.. 마일리지 적립
+                Long mileage = 0L;
+                if( user.getMileage() != null ){
+                    mileage = user.getMileage() + payMoney / 10;
+                }else{
+                    mileage = new Long(payMoney / 10);
+                }
+
+                user.setMileage( mileage );
+
+                userRepository.save(user);
+
+                MileageHistory mileageHistory = new MileageHistory();
+                mileageHistory.setOrderId(orderPlaced.getOrderId());
+                mileageHistory.setUserId(orderPlaced.getCustomerId());
+                mileageHistory.setTimestamp(orderPlaced.getTimestamp());
+                mileageHistory.setMileage(new Long(payMoney / 10));
+                mileageHistory.setTotalMileage(mileage);
+
+                mileageHistoryRepository.save(mileageHistory);
 
             }
 
-//            else if( event.getEventType().equals(DeliveryStarted.class.getSimpleName())){
-//
-//            }
-        } catch (
-        IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

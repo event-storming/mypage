@@ -1,20 +1,15 @@
 package com.example.template.event;
 
 import com.example.template.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 public class EventListener {
@@ -66,8 +61,9 @@ public class EventListener {
             else if( event.getEventType().equals(OrderPlaced.class.getSimpleName())){
                 OrderPlaced orderPlaced = objectMapper.readValue(message, OrderPlaced.class);
 
-                User user = userRepository.findById(orderPlaced.getCustomerId()).get();
+                User user = userRepository.findById(orderPlaced.getCustomerId()).orElse(null);
                 if( user == null ) {
+                    user =  new User();
                     user.setUsername(orderPlaced.getCustomerId());
                     user.setNickname(orderPlaced.getCustomerName());
                     user.setAddress(orderPlaced.getCustomerAddr());

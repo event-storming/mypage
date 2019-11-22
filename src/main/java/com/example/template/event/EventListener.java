@@ -37,6 +37,9 @@ public class EventListener {
         try {
             event = objectMapper.readValue(message, AbstractEvent.class);
 
+            /**
+             * 배송 완료 이벤트
+             */
             if( event.getEventType().equals(DeliveryCompleted.class.getSimpleName())){
                 DeliveryCompleted deliveryCompleted = objectMapper.readValue(message, DeliveryCompleted.class);
 
@@ -46,7 +49,9 @@ public class EventListener {
                 orderHistoryRepository.save(orderHistory);
 
             }
-
+            /**
+             * 배송 시작 이벤트
+             */
             else if( event.getEventType().equals(DeliveryStarted.class.getSimpleName())){
                 DeliveryStarted deliveryStarted = objectMapper.readValue(message, DeliveryStarted.class);
 
@@ -57,20 +62,25 @@ public class EventListener {
                 orderHistoryRepository.save(orderHistory);
 
             }
+            /**
+             * 배송 취소 이벤트
+             */
+            else if( event.getEventType().equals(DeliveryCancelled.class.getSimpleName())){
+                DeliveryCancelled deliveryCancelled = objectMapper.readValue(message, DeliveryCancelled.class);
 
-            else if( event.getEventType().equals(OrderPlaced.class.getSimpleName())){
+                OrderHistory orderHistory = orderHistoryRepository.findById(deliveryCancelled.getOrderId()).get();
+                orderHistory.setDeliveryId(deliveryCancelled.getDeliveryId());
+                orderHistory.setDeliveryStarted(false);
+                orderHistory.setDeliveryCompleted(false);
+                orderHistory.setDeliveryCancelled(true);
+
+                orderHistoryRepository.save(orderHistory);
+            }
+            /**
+             * 주문 생성 이벤트
+             */
+            else if( event.getEventType().equals(OrderPlaced.class.getSimpleName())) {
                 OrderPlaced orderPlaced = objectMapper.readValue(message, OrderPlaced.class);
-
-                User user = userRepository.findById(orderPlaced.getCustomerId()).orElse(null);
-                if( user == null ) {
-                    user =  new User();
-                    user.setUsername(orderPlaced.getCustomerId());
-                    user.setNickname(orderPlaced.getCustomerName());
-                    user.setAddress(orderPlaced.getCustomerAddr());
-                    user.setMileage(0L);
-
-                    userRepository.save(user);
-                }
 
                 int payMoney = orderPlaced.getPrice() * orderPlaced.getQuantity();
 
@@ -83,18 +93,29 @@ public class EventListener {
                 orderHistory.setTimestamp(orderPlaced.getTimestamp());
                 orderHistory.setQuantity(orderPlaced.getQuantity());
                 orderHistory.setPayment(payMoney);
+                orderHistory.setOrderState(OrderPlaced.class.getSimpleName());
 
                 orderHistoryRepository.save(orderHistory);
 
+                User user = userRepository.findById(orderPlaced.getCustomerId()).orElse(null);
+                if (user == null) {
+                    user = new User();
+                    user.setUsername(orderPlaced.getCustomerId());
+                    user.setNickname(orderPlaced.getCustomerName());
+                    user.setAddress(orderPlaced.getCustomerAddr());
+                    user.setMileage(0L);
+
+                    userRepository.save(user);
+                }
                 // 주문 완료시.. 마일리지 적립
                 Long mileage = 0L;
-                if( user.getMileage() != null ){
+                if (user.getMileage() != null) {
                     mileage = user.getMileage() + payMoney / 10;
-                }else{
+                } else {
                     mileage = new Long(payMoney / 10);
                 }
 
-                user.setMileage( mileage );
+                user.setMileage(mileage);
 
                 userRepository.save(user);
 
@@ -107,6 +128,51 @@ public class EventListener {
 
                 mileageHistoryRepository.save(mileageHistory);
 
+            }
+            /**
+             * 주문 취소 이벤트
+             */
+            else if( event.getEventType().equals(OrderCancelled.class.getSimpleName())){
+
+                OrderCancelled orderCancelled = objectMapper.readValue(message, OrderCancelled.class);
+                int payMoney = orderCancelled.getPrice() * orderCancelled.getQuantity();
+
+                OrderHistory orderHistory = new OrderHistory();
+                orderHistory.setOrderId(orderCancelled.getOrderId());
+                orderHistory.setProductId(orderCancelled.getProductId());
+                orderHistory.setUserId(orderCancelled.getCustomerId());
+                orderHistory.setNickName(orderCancelled.getCustomerName());
+                orderHistory.setProductName(orderCancelled.getProductName());
+                orderHistory.setTimestamp(orderCancelled.getTimestamp());
+                orderHistory.setQuantity(orderCancelled.getQuantity());
+                orderHistory.setPayment(payMoney);
+                orderHistory.setOrderState(OrderCancelled.class.getSimpleName());
+
+                orderHistoryRepository.save(orderHistory);
+
+                User user = userRepository.findById(orderCancelled.getCustomerId()).orElse(null);
+                if (user != null) {
+                    // 주문 취소시.. 마일리지 회수
+                    Long mileage = 0L;
+                    if (user.getMileage() != null) {
+                        mileage = user.getMileage() - payMoney / 10;
+                    } else {
+                        mileage = 0L - payMoney / 10;
+                    }
+
+                    user.setMileage(mileage);
+
+                    userRepository.save(user);
+
+                    MileageHistory mileageHistory = new MileageHistory();
+                    mileageHistory.setOrderId(orderCancelled.getOrderId());
+                    mileageHistory.setUserId(orderCancelled.getCustomerId());
+                    mileageHistory.setTimestamp(orderCancelled.getTimestamp());
+                    mileageHistory.setMileage(new Long(payMoney / 10));
+                    mileageHistory.setTotalMileage(mileage);
+
+                    mileageHistoryRepository.save(mileageHistory);
+                }
             }
 
         } catch (IOException e) {

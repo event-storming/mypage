@@ -19,11 +19,13 @@ public class OrderHistory {
 
     private int quantity;
     private int payment;
+    private String orderState;
 
     // 배송에서 온 정보
     private Long deliveryId;
     private boolean deliveryStarted;
     private boolean deliveryCompleted;
+    private boolean deliveryCancelled;
 
     //리뷰 체크유무
     private boolean surveyCompleted;
@@ -122,5 +124,21 @@ public class OrderHistory {
 
     public void setPayment(int payment) {
         this.payment = payment;
+    }
+
+    public String getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
+    }
+
+    public boolean isDeliveryCancelled() {
+        return deliveryCancelled;
+    }
+
+    public void setDeliveryCancelled(boolean deliveryCancelled) {
+        this.deliveryCancelled = deliveryCancelled;
     }
 }

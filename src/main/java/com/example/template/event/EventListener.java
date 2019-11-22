@@ -45,6 +45,7 @@ public class EventListener {
 
                 OrderHistory orderHistory = orderHistoryRepository.findById(deliveryCompleted.getOrderId()).get();
                 orderHistory.setDeliveryCompleted(true);
+                orderHistory.setDeliveryCancelled(false);
 
                 orderHistoryRepository.save(orderHistory);
 
@@ -58,7 +59,7 @@ public class EventListener {
                 OrderHistory orderHistory = orderHistoryRepository.findById(deliveryStarted.getOrderId()).get();
                 orderHistory.setDeliveryId(deliveryStarted.getDeliveryId());
                 orderHistory.setDeliveryStarted(true);
-
+                orderHistory.setDeliveryCancelled(false);
                 orderHistoryRepository.save(orderHistory);
 
             }

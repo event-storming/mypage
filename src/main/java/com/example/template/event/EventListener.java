@@ -1,10 +1,12 @@
 package com.example.template.event;
 
 import com.example.template.*;
+import com.example.template.config.kafka.KafkaProcessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -26,10 +28,9 @@ public class EventListener {
     /**
      * 각종 이벤트 발생시 저장을 하는 공간
      * @param message
-     * @param consumerRecord
      */
-    @KafkaListener(topics = "${eventTopic}")
-    public void onMessage(@Payload String message, ConsumerRecord<?, ?> consumerRecord) {
+    @StreamListener(KafkaProcessor.INPUT)
+    public void onMessage(@Payload String message) {
         System.out.println(message);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

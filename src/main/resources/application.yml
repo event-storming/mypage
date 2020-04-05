@@ -18,7 +18,7 @@ spring:
                 serde: org.apache.kafka.common.serialization.Serdes$StringSerde
       bindings:
         event-in:
-          group: mypage
+          group: mypage${random.value}
           destination: eventTopic
           contentType: application/json
         event-out:
@@ -59,7 +59,7 @@ spring:
                 serde: org.apache.kafka.common.serialization.Serdes$StringSerde
       bindings:
         event-in:
-          group: mypage
+          group: mypage${random.value}
           destination: eventTopicDocker
           contentType: application/json
         event-out:
